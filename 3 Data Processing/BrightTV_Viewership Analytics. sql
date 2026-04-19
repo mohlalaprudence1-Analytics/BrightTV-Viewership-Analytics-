@@ -1,0 +1,106 @@
+--Changing UTC to SA time
+SELECT `Viewership time`,
+CONVERT_TIMEZONE("UTC", "Africa/Johannesburg", `Viewership time`) AS Viewership_sa_time
+FROM `BrightTV-JoinedTablesnw`;
+
+SELECT *
+FROM `BrightTV-JoinedTablesnw`;
+
+SELECT name, surname, `Viewership.Channel2`
+FROM `BrightTV-JoinedTablesnw`;
+
+SELECT `Viewership.Channel2`, COUNT(*) AS total_views
+FROM `BrightTV-JoinedTablesnw`
+GROUP BY `Viewership.Channel2`;
+
+SELECT DISTINCT province
+FROM `BrightTV-JoinedTablesnw`;
+
+SELECT DISTINCT gender, province
+FROM `brighttv-joinedtablesnw`;
+
+--Finding provinces with NULLS
+SELECT*
+FROM `BrightTV-JoinedTablesnw`
+WHERE Province IS NULL;
+
+--Replacing NULLS on province
+SELECT name, COALESCE(province,'none') AS province
+FROM `BrightTV-JoinedTablesnw`;
+
+--Replacing NULLS on age
+SELECT name, 
+CASE WHEN age IS NULL THEN 'Missing Age'
+ELSE 'AGE Available'
+END AS age_status
+FROM `BrightTV-JoinedTablesnw`;
+
+--Replacing NULLS on time
+SELECT `Viewership time`
+FROM `BrightTV-JoinedTablesnw`
+WHERE `Viewership time` IS NULL;
+
+--Channel that is viewed the most
+SELECT `Viewership.Channel2`,
+COUNT(*) AS total_views
+FROM `BrightTV-JoinedTablesnw`
+GROUP BY `Viewership.Channel2`
+ORDER BY total_views DESC;
+
+--Views by Province
+SELECT province,
+COUNT(*) AS total_views
+FROM `BrightTV-JoinedTablesnw`
+GROUP BY province
+ORDER BY total_views DESC;
+
+--Viewership by province and gender
+SELECT province, gender,
+COUNT(*) AS total_views
+FROM `BrightTV-JoinedTablesnw`
+GROUP BY province, gender
+ORDER BY total_views DESC;
+
+--Age buckets
+SELECT
+CASE
+WHEN age BETWEEN 0 AND 14 THEN '0-14'
+WHEN age BETWEEN 15 AND 29 THEN '15-29'
+WHEN AGE BETWEEN 30 AND 44 THEN '30-44'
+WHEN AGE BETWEEN 45 AND 59 THEN '45-59'
+WHEN AGE BETWEEN 60 AND 74 THEN '60-74'
+ELSE '75+'
+END AS `age-group`,
+COUNT (*) AS total_views
+FROM `BrightTV-JoinedTablesnw`
+Group BY `age-group`;
+
+--Time buckets (Most viewed)
+SELECT gender,
+CASE 
+WHEN EXTRACT(HOUR FROM `Viewership time`) BETWEEN 6 AND 11 THEN 'Morning'
+WHEN EXTRACT(HOUR FROM `Viewership time`) BETWEEN 12 AND 17 THEN 'Afternoon'
+WHEN EXTRACT(HOUR FROM `Viewership time`) BETWEEN 18 AND 22 THEN 'Evening'
+ELSE 'Night'
+END AS time_bucket,
+COUNT(*) AS total_views
+FROM `BrightTV-JoinedTablesnw`
+GROUP BY gender, time_bucket
+ORDER BY total_views ASC;
+
+--Viewership by Race
+SELECT race,
+COUNT(*) AS total_views
+FROM `BrightTV-JoinedTablesnw`
+GROUP BY Race
+ORDER BY total_views ASC;
+
+--Overall most watched channel
+SELECT*
+FROM `BrightTV-JoinedTablesnw`
+ORDER BY `Viewership.Duration 2` DESC
+LIMIT 10;
+
+SELECT*
+FROM `BrightTV-JoinedTablesnw`
+LIMIT 20000
